@@ -1,6 +1,7 @@
 import logging
 import sys
 
+import discord
 from discord.ext import commands
 from discord.utils import get, find
 
@@ -29,7 +30,13 @@ async def on_ready():
     print(f'command_prefix : {bot.command_prefix}')
     global emojis
     emojis = {x.name: x for x in bot.emojis}
-    print(f'emojis = {list(emojis.keys())}')
+    print(f'emojis = {emojis}')
+    
+    # 봇이 플레이중인 게임을 설정할 수 있습니다.
+    await bot.change_presence(status=discord.Status.online,
+                              activity=discord.Game(name="Coders' Community Management", type=1))
+    
+    await bot.get_channel(655675096903712778).send("서버관리 봇이 실행되었습니다! :sunny:")
 
 
 '''
@@ -202,6 +209,8 @@ async def cmd_cog_reload(ctx, *, cog_name):
 설정 커맨드와 여러 서브커맨드들이 모여있는 모듈입니다.
 서버 관리 기능을 제공합니다.
 
+@commands.is_owner() : 관리자 이상만 쓸 수 있는 명령어 (서버 소유자인가요? 봇 소유자?)
+
 setting() : 설정
 ㄴ set_role() : 역할 지급 채널 설정 커맨드.
 
@@ -224,11 +233,11 @@ async def setting(ctx):
 @commands.is_owner()
 @setting.command(name="역할지급")
 async def set_role(ctx):
+    global roles_dict, role_setting_msg_id
     # logger.debug('set_role 진입')
     print(f'{ctx.author} 님이 {ctx.message.channel}에서 {ctx.prefix}{ctx.command} 을(를) 사용했습니다.')
     msg = await ctx.send('현재 사용 가능한 역할들입니다!')
     print(f'msg.id = {msg.id}')
-    global role_setting_msg_id
     role_setting_msg_id = msg.id
     for emoji in roles_dict['lang'].keys():
         await msg.add_reaction(emojis[emoji])
@@ -238,6 +247,35 @@ async def set_role(ctx):
     config.write(f'role_setting_msg_id={str(msg.id)}')
     config.close()
 
+
+@commands.is_owner()
+@setting.command(name="역할지급_테스트")
+async def set_role_test(ctx):
+    global roles_dict, role_setting_msg_id
+    # logger.debug('set_role 진입')
+    print(f'[ 테스트 커맨드 ] {ctx.author} 님이 {ctx.message.channel}에서 {ctx.prefix}{ctx.command} 을(를) 사용했습니다.')
+    await ctx.send('현재 사용 가능한 역할들입니다!')
+    #global role_setting_msg_id
+    #role_setting_msg_id = msg.id
+    content = '**분야별 역할**\n'
+    msg = await ctx.send(content)
+    for emoji in roles_dict['category'].keys():
+        content += f'<:{emojis[emoji].name}:{emojis[emoji].id}> : {roles_dict[emoji]}\n'
+        print(f'content = {content}')
+        await msg.edit(content=content)
+        await msg.add_reaction(emojis[emoji])
+    msg = await ctx.send('**언어별 역할** \n')
+    for emoji in roles_dict['lang'].keys():
+        await msg.add_reaction(emojis[emoji])
+    msg = await ctx.send('**게임엔진별 역할** \n')
+    for emoji in roles_dict['game_engine'].keys():
+        await msg.add_reaction(emojis[emoji])
+    print('채널 설정 완료. 생성된 메세지의 id를 저장합니다.')
+    '''
+    config = open(mode='wt', file='config.txt')
+    config.write(f'role_setting_msg_id={str(msg.id)}')
+    config.close()
+    '''
 
 '''
 [ 봇 전후처리 로직 ]

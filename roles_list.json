@@ -20,8 +20,35 @@
     "app": "App",
     "web": "Web",
     "desktop": "Desktop",
+    "game": "Game"
+  },
+  "game_engine": {
+    "unity": "Unity",
+    "unreal": "Unreal",
+    "star_struck": "Game_Native"
+  },
+  "id": {
+    "c_": "655657652029882408",
+    "cpp": "655657652029882408",
+    "csharp": "C#",
+    "python": "Python",
+    "rust": "Rust",
+    "java": "Java",
+    "golang": "Go",
+    "haskell": "Haskell",
+    "javascript": "Javascript",
+    "nodejs": "Node.js",
+    "typescript": "Typescript",
+    "html5": "HTML",
+    "css": "CSS",
+    "ahee": "아희",
+    "dart": "Dart",
+    "app": "App",
+    "web": "Web",
+    "desktop": "Desktop",
     "game": "Game",
     "unity": "Unity",
-    "unreal": "Unreal"
+    "unreal": "Unreal",
+    "star_struck": "Game_Native"
   }
 }
