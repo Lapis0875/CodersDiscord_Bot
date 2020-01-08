@@ -36,7 +36,7 @@ async def on_ready():
     await bot.change_presence(status=discord.Status.online,
                               activity=discord.Game(name="Coders' Community Management", type=1))
     
-    await bot.get_channel(655675096903712778).send("서버관리 봇이 실행되었습니다! :sunny:")
+    # await bot.get_channel(655675096903712778).send("서버관리 봇이 실행되었습니다! :sunny:")
 
 
 '''
@@ -262,7 +262,7 @@ async def set_role_test(ctx):
     for emoji in roles_dict['category'].keys():
         content += f'<:{emojis[emoji].name}:{emojis[emoji].id}> : {roles_dict[emoji]}\n'
         print(f'content = {content}')
-        await msg.edit(content=content)
+        await msg.edit(content=content, supress=False)
         await msg.add_reaction(emojis[emoji])
     msg = await ctx.send('**언어별 역할** \n')
     for emoji in roles_dict['lang'].keys():
